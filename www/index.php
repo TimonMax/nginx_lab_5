@@ -1,4 +1,5 @@
 <?php
+// www/index.php
 session_start();
 require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/RepairRequest.php';
@@ -17,7 +18,12 @@ unset($_SESSION['errors'], $_SESSION['success'], $_SESSION['old']);
   <meta charset="utf-8">
   <title>Заявки — ремонт техники</title>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <style> body{font-family:Arial,Helvetica,sans-serif;padding:18px} table{border-collapse:collapse;width:100%} th,td{border:1px solid #ddd;padding:8px} </style>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;padding:18px}
+    table{border-collapse:collapse;width:100%}
+    th,td{border:1px solid #ddd;padding:8px}
+    a.action { margin-right:8px; }
+  </style>
 </head>
 <body>
   <h1>Заявки на ремонт</h1>
@@ -39,7 +45,17 @@ unset($_SESSION['errors'], $_SESSION['success'], $_SESSION['old']);
     <p>Записей пока нет.</p>
   <?php else: ?>
     <table>
-      <tr><th>#</th><th>Имя</th><th>Модель</th><th>Email</th><th>Услуга</th><th>Гарантия</th><th>Срок</th><th>Время</th></tr>
+      <tr>
+        <th>#</th>
+        <th>Имя</th>
+        <th>Модель</th>
+        <th>Email</th>
+        <th>Услуга</th>
+        <th>Гарантия</th>
+        <th>Срок</th>
+        <th>Время</th>
+        <th>Действия</th>
+      </tr>
       <?php foreach ($all as $r): ?>
         <tr>
           <td><?= htmlspecialchars($r['id']) ?></td>
@@ -50,6 +66,11 @@ unset($_SESSION['errors'], $_SESSION['success'], $_SESSION['old']);
           <td><?= $r['warranty'] ? 'Да' : 'Нет' ?></td>
           <td><?= htmlspecialchars($r['term']) ?></td>
           <td><?= htmlspecialchars($r['created_at']) ?></td>
+          <td>
+            <a class="action" href="edit.php?id=<?= urlencode($r['id']) ?>">Редактировать</a>
+            <a class="action" href="delete.php?id=<?= urlencode($r['id']) ?>"
+               onclick="return confirm('Удалить запись #<?= htmlspecialchars($r['id']) ?>?')">Удалить</a>
+          </td>
         </tr>
       <?php endforeach; ?>
     </table>
